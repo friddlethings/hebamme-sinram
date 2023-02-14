@@ -1,0 +1,71 @@
+@use 'sass:list';
+@use 'sass:map';
+
+$media-direction: min;
+
+$mobile-width: 440px;
+$tablet-portrait-width: 768px;
+$tablet-landscape-width: 1024px;
+$notebook-width: 1280px;
+$desktop-width: 1680px;
+$television-width: 1920px;
+
+$breakpoints: (
+  'xs': $mobile-width,
+  's': $tablet-portrait-width,
+  'm': $tablet-landscape-width,
+  'l': $notebook-width,
+  'xl': $desktop-width,
+  'xxl': $television-width
+);
+
+$rangeBreakpoints: ('s', 'l', 'xl', 'xxl');
+
+// breakpoints
+@mixin breakpoint($breakpoint, $direction: $media-direction) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (#{$direction}-width: #{map-get($breakpoints, $breakpoint)}) {
+      @content;
+    }
+  } @else if unitless($breakpoint) {
+    $breakpoint: $breakpoint + 0;
+
+    @media (#{$direction}-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// responsive properties
+
+@mixin responsive-prop($classname, $values) {
+  @each $value in $values {
+    &.#{$classname}-#{$value} {
+      @content ($value);
+    }
+  }
+
+  @each $breakpoint, $width in $breakpoints {
+    @each $value in $values {
+      &.#{$classname}-#{$breakpoint}-#{$value} {
+        @include breakpoint($breakpoint) {
+          @content ($value);
+        }
+      }
+    }
+  }
+}
+
+@function numberRange($min, $max) {
+  $output: ();
+
+  @for $i from $min through $max {
+    $output: list.append($output, $i);
+  }
+
+  @return $output;
+}
+
+@function shirtTypes() {
+  @return xs, s, m, l, xl, xxl;
+}

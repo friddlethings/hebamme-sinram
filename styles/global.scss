@@ -1,0 +1,14 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overscroll-behavior: none;
+  font: font(1.6, base, medium);
+  font-family: 'Inter', sans-serif;
+}
